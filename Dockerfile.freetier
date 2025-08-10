@@ -1,0 +1,64 @@
+# Simplified Dockerfile for free tier deployment (SQLite-based)
+FROM node:18-alpine AS base
+
+# Install dependencies only when needed
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+
+# Install dependencies
+COPY package.json package-lock.json* ./
+RUN npm ci --omit=dev
+
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+# Update Prisma schema to use SQLite if it's PostgreSQL
+RUN sed -i 's/provider = "postgresql"/provider = "sqlite"/' prisma/schema.prisma || true
+
+# Generate Prisma client for SQLite
+RUN npx prisma generate
+
+# Build Next.js application
+RUN npm run build
+
+# Production image
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Install curl for health checks
+RUN apk add --no-cache curl
+
+# Copy built application
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/server.js ./server.js
+
+# Copy Prisma client
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+
+# Create required directories
+RUN mkdir -p ./uploads ./database ./logs
+RUN chown nextjs:nodejs ./uploads ./database ./logs
+
+USER nextjs
+
+EXPOSE 3000
+EXPOSE 3001
+
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
+
+# Run database migrations and start the application
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && node server.js"]

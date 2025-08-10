@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+/* Import board animations after Tailwind */
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -23,4 +25,274 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Admin interface override - force dark text on light backgrounds */
+.admin-interface {
+  color: #111827 !important;
+}
+
+
+
+/* Make sure paragraphs, divs, spans inherit dark color but not buttons */
+.admin-interface p,
+.admin-interface div:not(button):not([class*="bg-"]),
+.admin-interface span:not([class*="bg-"]),
+.admin-interface h1,
+.admin-interface h2,
+.admin-interface h3,
+.admin-interface h4,
+.admin-interface label {
+  color: inherit;
+}
+
+/* Board Animation Styles */
+
+/* Flying Messages Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(var(--rotation, 0deg));
+  }
+  50% {
+    transform: translateY(-20px) rotate(var(--rotation, 0deg));
+  }
+}
+
+@keyframes drift {
+  0% {
+    transform: translateX(0px) rotate(var(--rotation, 0deg));
+  }
+  100% {
+    transform: translateX(10px) rotate(var(--rotation, 0deg));
+  }
+}
+
+@keyframes fadeInFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) scale(0.8) rotate(var(--rotation, 0deg));
+  }
+  100% {
+    opacity: 0.85;
+    transform: translateY(0px) scale(1) rotate(var(--rotation, 0deg));
+  }
+}
+
+@keyframes fadeInThenFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) scale(0.8) rotate(var(--rotation, 0deg));
+  }
+  20% {
+    opacity: 0.85;
+    transform: translateY(0px) scale(1) rotate(var(--rotation, 0deg));
+  }
+  50% {
+    transform: translateY(-10px) scale(1.05) rotate(calc(var(--rotation, 0deg) + 2deg));
+  }
+  100% {
+    transform: translateY(10px) scale(0.95) rotate(calc(var(--rotation, 0deg) - 2deg));
+  }
+}
+
+@keyframes fadeInThenDrift {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) scale(0.8) rotate(var(--rotation, 0deg));
+  }
+  25% {
+    opacity: 0.85;
+    transform: translateY(0px) scale(1) rotate(var(--rotation, 0deg));
+  }
+  50% {
+    transform: translateY(-5px) scale(1.02) rotate(calc(var(--rotation, 0deg) + 1deg));
+  }
+  100% {
+    transform: translateY(5px) scale(0.98) rotate(calc(var(--rotation, 0deg) - 1deg));
+  }
+}
+
+@keyframes fadeOutFloat {
+  0% {
+    opacity: 0.85;
+    transform: translateY(0px) scale(1) rotate(var(--rotation, 0deg));
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.6) rotate(var(--rotation, 0deg));
+  }
+}
+
+@keyframes flyAcross {
+  0% {
+    transform: translateX(-100vw) rotate(0deg) scale(0.8);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(100vw) rotate(360deg) scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* Post-it Note Animations */
+@keyframes postitPeel {
+  0% {
+    transform: rotateY(0deg) rotate(var(--rotation, 0deg));
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  100% {
+    transform: rotateY(-15deg) rotate(var(--rotation, 0deg));
+    box-shadow: -8px 8px 20px rgba(0,0,0,0.3);
+  }
+}
+
+@keyframes postitPlaceDown {
+  0% {
+    transform: translateY(-20px) rotate(calc(var(--rotation, 0deg) - 5deg)) scale(1.05);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+  100% {
+    transform: translateY(0px) rotate(var(--rotation, 0deg)) scale(1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+}
+
+@keyframes postitFlutter {
+  0%, 100% {
+    transform: rotate(var(--rotation, 0deg));
+  }
+  25% {
+    transform: rotate(calc(var(--rotation, 0deg) + 2deg));
+  }
+  75% {
+    transform: rotate(calc(var(--rotation, 0deg) - 2deg));
+  }
+}
+
+/* Animation Classes */
+.flying-message {
+  animation: float 6s ease-in-out infinite alternate,
+             drift 8s ease-in-out infinite alternate-reverse;
+  animation-delay: var(--delay, 0s);
+}
+
+.flying-message-enter {
+  animation: fadeInFloat 1s ease-out forwards;
+  animation-delay: var(--delay, 0s);
+  opacity: 0.85;
+}
+
+.flying-message-float {
+  animation: fadeInThenFloat 1s ease-out forwards, float 8s ease-in-out infinite 1s;
+  animation-delay: var(--delay, 0s);
+  opacity: 0.85;
+}
+
+.flying-message-static {
+  animation: fadeInThenDrift 1s ease-out forwards, drift 12s ease-in-out infinite 1s;
+  animation-delay: var(--delay, 0s);
+  opacity: 0.85;
+}
+
+.flying-message-cross {
+  animation: flyAcross 12s linear infinite;
+  animation-delay: var(--delay, 0s);
+  opacity: 0.8;
+}
+
+.flying-message-exit {
+  animation: fadeOutFloat 1s ease-in forwards;
+}
+
+.postit-note {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.postit-note:hover {
+  animation: postitPeel 0.3s ease-out forwards;
+  z-index: 10;
+}
+
+.postit-note-enter {
+  animation: postitPlaceDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+.postit-flutter {
+  animation: postitFlutter 4s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+/* Post-it Color Variations */
+.postit-yellow { background: linear-gradient(135deg, #ffff88, #ffed4e); }
+.postit-pink { background: linear-gradient(135deg, #ffb3ba, #ff9aa2); }
+.postit-blue { background: linear-gradient(135deg, #b3d9ff, #87ceeb); }
+.postit-green { background: linear-gradient(135deg, #b3ffb3, #90ee90); }
+.postit-orange { background: linear-gradient(135deg, #ffd4b3, #ffb347); }
+.postit-purple { background: linear-gradient(135deg, #d4b3ff, #dda0dd); }
+
+/* Board Backgrounds */
+.board-cork {
+  background: 
+    radial-gradient(circle at 20% 80%, #d2b48c 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, #deb887 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, #d2b48c 0%, transparent 50%),
+    #daa520;
+  position: relative;
+}
+
+.board-fabric {
+  background: 
+    linear-gradient(45deg, #f5f5dc 25%, transparent 25%),
+    linear-gradient(-45deg, #f5f5dc 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #f5f5dc 75%),
+    linear-gradient(-45deg, transparent 75%, #f5f5dc 75%),
+    #faf0e6;
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+/* Tape and Pin Effects */
+.tape-horizontal {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 20px;
+  background: #f0e68c;
+  border-radius: 2px;
+  opacity: 0.8;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.pin {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle at 30% 30%, #ffd700, #b8860b);
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+.tape-corner {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 25px;
+  height: 25px;
+  background: #f0e68c;
+  transform: rotate(45deg);
+  border-radius: 2px;
+  opacity: 0.8;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }

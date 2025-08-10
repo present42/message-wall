@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url = env("DATABASE_URL")
+}
+
+// User model for admin authentication
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  email    String @unique
+  password String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+// Board model for different message board layouts
+model Board {
+  id               Int       @id @default(autoincrement())
+  type             BoardType
+  title            String
+  isActive         Boolean   @default(false) @map("is_active")
+  backgroundImg    String?   @map("background_img")
+  fontFamily       String?   @map("font_family")
+  backgroundColor  String?   @map("background_color")
+  titleColor       String?   @map("title_color")
+  openDate         DateTime? @map("open_date")
+  bgMusic          String?   @map("bg_music")
+  postColors       String?   @map("post_colors")
+  backgroundVideo  String?   @map("background_video")
+  bgMusicExtension String?   @map("bg_music_extension")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  posts Post[]
+
+  @@map("boards")
+}
+
+// Post model for user messages
+model Post {
+  id        Int        @id @default(autoincrement())
+  boardId   Int        @map("board_id")
+  message   String?
+  nickname  String?
+  email     String?
+  imagePath String?    @map("image_path") // Keep for backward compatibility
+  status    PostStatus @default(PENDING)
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  board       Board        @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  attachments Attachment[]
+
+  @@map("posts")
+}
+
+// Attachment model for multiple file uploads per post
+model Attachment {
+  id           Int      @id @default(autoincrement())
+  postId       Int      @map("post_id")
+  filename     String // Generated filename (UUID-based)
+  originalName String   @map("original_name") // Original filename from user
+  filePath     String   @map("file_path") // Relative path to file
+  fileSize     Int      @map("file_size") // File size in bytes
+  mimeType     String   @map("mime_type") // MIME type (image/jpeg, etc.)
+  dimensions   String? // JSON string for image dimensions {"width": 800, "height": 600}
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@map("attachments")
+}
+
+// Enums
+enum BoardType {
+  FLYING_MESSAGES
+  POST_IT
+  NEWYEAR
+  NEWYEAR_RABBIT
+}
+
+enum PostStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+

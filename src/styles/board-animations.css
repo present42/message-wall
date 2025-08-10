@@ -1,0 +1,282 @@
+/* Advanced Board Animations */
+
+/* Flying Messages Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(var(--rotation, 0deg));
+  }
+  50% {
+    transform: translateY(-20px) rotate(var(--rotation, 0deg));
+  }
+}
+
+@keyframes drift {
+  0% {
+    transform: translateX(0px) rotate(var(--rotation, 0deg));
+  }
+  100% {
+    transform: translateX(10px) rotate(var(--rotation, 0deg));
+  }
+}
+
+@keyframes fadeInFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) scale(0.8) rotate(var(--rotation, 0deg));
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px) scale(1) rotate(var(--rotation, 0deg));
+  }
+}
+
+@keyframes flyAcross {
+  0% {
+    transform: translateX(-100vw) rotate(0deg) scale(0.8);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100vw) rotate(360deg) scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* Post-it Note Animations */
+@keyframes postitPeel {
+  0% {
+    transform: rotateY(0deg) rotate(var(--rotation, 0deg));
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  100% {
+    transform: rotateY(-15deg) rotate(var(--rotation, 0deg));
+    box-shadow: -8px 8px 20px rgba(0,0,0,0.3);
+  }
+}
+
+@keyframes postitPlaceDown {
+  0% {
+    transform: translateY(-20px) rotate(calc(var(--rotation, 0deg) - 5deg)) scale(1.05);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+  100% {
+    transform: translateY(0px) rotate(var(--rotation, 0deg)) scale(1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+}
+
+@keyframes postitFlutter {
+  0%, 100% {
+    transform: rotate(var(--rotation, 0deg));
+  }
+  25% {
+    transform: rotate(calc(var(--rotation, 0deg) + 2deg));
+  }
+  75% {
+    transform: rotate(calc(var(--rotation, 0deg) - 2deg));
+  }
+}
+
+/* Tape Effects */
+@keyframes tapeShine {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Pin Effects */
+@keyframes pinGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(255, 215, 0, 0);
+  }
+}
+
+/* Utility Classes */
+.flying-message {
+  animation: float 6s ease-in-out infinite alternate,
+             drift 8s ease-in-out infinite alternate-reverse;
+  animation-delay: var(--delay, 0s);
+}
+
+.flying-message-enter {
+  animation: fadeInFloat 1s ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+.flying-message-cross {
+  animation: flyAcross 12s linear infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+.postit-note {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.postit-note:hover {
+  animation: postitPeel 0.3s ease-out forwards;
+  z-index: 10;
+}
+
+.postit-note-enter {
+  animation: postitPlaceDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+.postit-flutter {
+  animation: postitFlutter 4s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+/* Tape Styling */
+.tape-horizontal {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 20px;
+  background: linear-gradient(45deg, 
+    rgba(255,255,255,0.1) 25%, 
+    transparent 25%, 
+    transparent 75%, 
+    rgba(255,255,255,0.1) 75%),
+    linear-gradient(-45deg, 
+    rgba(255,255,255,0.1) 25%, 
+    transparent 25%, 
+    transparent 75%, 
+    rgba(255,255,255,0.1) 75%),
+    #f0e68c;
+  background-size: 8px 8px, 8px 8px, 100% 100%;
+  border-radius: 2px;
+  opacity: 0.8;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.tape-horizontal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255,255,255,0.4) 50%, 
+    transparent 100%);
+  animation: tapeShine 3s ease-in-out infinite;
+}
+
+.tape-corner {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 25px;
+  height: 25px;
+  background: #f0e68c;
+  transform: rotate(45deg);
+  border-radius: 2px;
+  opacity: 0.8;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* Pin Styling */
+.pin {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle at 30% 30%, #ffd700, #b8860b);
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+.pin::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle at 30% 30%, #ffffff, transparent);
+  border-radius: 50%;
+  opacity: 0.7;
+}
+
+.pin:hover {
+  animation: pinGlow 1.5s ease-in-out infinite;
+}
+
+/* Board-specific backgrounds */
+.board-cork {
+  background: 
+    radial-gradient(circle at 20% 80%, #d2b48c 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, #deb887 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, #d2b48c 0%, transparent 50%),
+    #daa520;
+  position: relative;
+}
+
+.board-cork::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #8b4513, transparent),
+    radial-gradient(2px 2px at 40px 70px, #a0522d, transparent),
+    radial-gradient(1px 1px at 90px 40px, #8b4513, transparent);
+  background-size: 100px 100px, 120px 120px, 80px 80px;
+  opacity: 0.3;
+}
+
+.board-fabric {
+  background: 
+    linear-gradient(45deg, #f5f5dc 25%, transparent 25%),
+    linear-gradient(-45deg, #f5f5dc 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #f5f5dc 75%),
+    linear-gradient(-45deg, transparent 75%, #f5f5dc 75%),
+    #faf0e6;
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+/* Post-it Color Variations */
+.postit-yellow { background: linear-gradient(135deg, #ffff88, #ffed4e); }
+.postit-pink { background: linear-gradient(135deg, #ffb3ba, #ff9aa2); }
+.postit-blue { background: linear-gradient(135deg, #b3d9ff, #87ceeb); }
+.postit-green { background: linear-gradient(135deg, #b3ffb3, #90ee90); }
+.postit-orange { background: linear-gradient(135deg, #ffd4b3, #ffb347); }
+.postit-purple { background: linear-gradient(135deg, #d4b3ff, #dda0dd); }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .flying-message, .postit-note {
+    font-size: 0.875rem;
+    max-width: 200px;
+  }
+  
+  .tape-horizontal {
+    width: 40px;
+    height: 15px;
+  }
+  
+  .pin {
+    width: 10px;
+    height: 10px;
+  }
+}

@@ -39,3 +39,55 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/src/generated/prisma
+
+# Database files
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+/prisma/dev.db*
+/database/
+
+# Uploads directory (user uploaded files)
+/uploads/
+/public/uploads/
+/public/music/
+/public/videos/
+
+# Logs
+/logs/
+*.log
+/pm2-logs/
+
+# AWS and deployment
+/terraform-freetier/.terraform/
+/terraform-freetier/*.tfstate*
+/terraform-freetier/.terraform.lock.hcl
+
+# IDE and editor files
+.vscode/settings.json
+.vscode/launch.json
+.idea/
+*.swp
+*.swo
+
+# GitHub specific files (excluding entire .github folder)
+.github/
+
+# VS code specific files (excluding entire .vscode folder)
+.vscode/
+
+# OS generated files
+Thumbs.db
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Temporary files
+/tmp/
+*.tmp

@@ -1,0 +1,50 @@
+version: "3.8"
+
+# Minimal Docker setup that mirrors AWS Free Tier deployment
+# Uses SQLite instead of PostgreSQL to match the free tier setup
+
+services:
+  # Message Wall Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.freetier
+    container_name: messagewall-freetier
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=file:/app/database/messagewall.db
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=your-secret-key-here
+      - UPLOAD_DIR=/app/uploads
+      - SOCKET_PORT=3001
+      - MAX_FILE_SIZE=5242880
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    volumes:
+      - ./database:/app/database
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx (optional - matches EC2 setup)
+  nginx:
+    image: nginx:alpine
+    container_name: messagewall-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-freetier.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./uploads:/var/www/uploads:ro
+    depends_on:
+      - app
+    restart: unless-stopped
+
+volumes:
+  app_data:
+    driver: local
