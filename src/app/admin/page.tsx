@@ -37,7 +37,7 @@ export default function AdminDashboard() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         <div className="flex items-center">
-                            <h1 className="text-xl font-semibold">SSC Hub Admin</h1>
+                            <h1 className="text-xl font-semibold">Message Wall Admin</h1>
                             <div className="ml-4 text-sm text-gray-600">
                                 Welcome, {session.user?.name}
                             </div>

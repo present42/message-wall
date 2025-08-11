@@ -1,4 +1,4 @@
-# Contributing to SSC Hub Message Wall
+# Contributing to Message Wall
 
 We love your input! We want to make contributing to Message Wall as easy and transparent as possible, whether it's:
 

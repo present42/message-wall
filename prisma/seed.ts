@@ -13,7 +13,7 @@ async function main() {
         update: {},
         create: {
             username: 'admin',
-            email: 'admin@sschub.hk',
+            email: 'admin@example.com',
             password: hashedPassword,
         },
     })
@@ -24,7 +24,7 @@ async function main() {
         where: { id: 1 },
         update: {},
         create: {
-            title: 'Welcome to SSC Hub!',
+            title: 'Welcome to Message Wall!',
             type: BoardType.FLYING_MESSAGES,
             backgroundColor: '#f0f9ff',
             titleColor: '#1e40af',
@@ -38,8 +38,8 @@ async function main() {
     const samplePosts = [
         {
             message: "Welcome to our new digital message wall! Share your thoughts and connect with the community.",
-            nickname: "SSC Team",
-            email: "team@sschub.hk",
+            nickname: "Demo Team",
+            email: "demo@example.com",
             status: PostStatus.APPROVED,
             boardId: sampleBoard.id,
         },
@@ -51,7 +51,7 @@ async function main() {
             boardId: sampleBoard.id,
         },
         {
-            message: "Hello from the SSC Hub message wall! This is a test message to see how it looks.",
+            message: "Hello from the message wall! This is a test message to see how it looks.",
             nickname: "Test User",
             email: "test@example.com",
             status: PostStatus.PENDING,

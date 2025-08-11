@@ -1,4 +1,4 @@
-# SSC Hub Message Wall
+# Message Wall
 
 A modern, real-time digital message board application built with Next.js, React, and Prisma. This project allows users to post messages with images on customizable digital boards with different themes and layouts, featuring real-time updates and admin moderation.
 

@@ -70,7 +70,7 @@ export default function SubmitMessage() {
                         Submit Your Message
                     </h1>
                     <p className="mt-2 text-gray-600">
-                        Share your thoughts with the SSC Hub community
+                        Share your thoughts with the community
                     </p>
                 </div>
 

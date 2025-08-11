@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SSC Hub Message Wall",
+  title: "Message Wall",
   description: "Digital message board system with admin moderation",
 };
 
