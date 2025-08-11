@@ -2,10 +2,16 @@
 
 A modern, real-time digital message board application built with Next.js, React, and Prisma. This project allows users to post messages with images on customizable digital boards with different themes and layouts, featuring real-time updates and admin moderation.
 
+## 🌐 Live Demo
+
+🔗 **[View Live Demo](http://52.1.206.23:3000/)**  
+🔧 **[Admin Panel](http://52.1.206.23:3000/admin)** (Demo purposes)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-5-2D3748)](https://www.prisma.io/)
+[![AWS](https://img.shields.io/badge/AWS-Free_Tier-orange)](https://aws.amazon.com/free/)
 
 ## ✨ Features
 
