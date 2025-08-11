@@ -46,7 +46,7 @@ A modern, real-time digital message board application built with Next.js, React,
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/message-wall.git
+git clone https://github.com/present42/message-wall.git
 cd message-wall
 ```
 
@@ -72,7 +72,7 @@ Edit the `.env` file with your configuration:
 # Database Configuration
 DATABASE_URL="file:./dev.db"
 
-# NextAuth.js Configuration  
+# NextAuth.js Configuration
 NEXTAUTH_SECRET="your-secure-secret-here"
 NEXTAUTH_URL="http://localhost:3000"
 ```
@@ -96,7 +96,7 @@ npx prisma db seed
 npm run dev
 # or
 yarn dev
-# or  
+# or
 pnpm dev
 ```
 
@@ -105,9 +105,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## 🗄️ Database Setup
 
 ### Development (SQLite)
+
 The project uses SQLite by default for development. No additional setup required.
 
 ### Production (PostgreSQL)
+
 For production, update your `.env` file:
 
 ```env
@@ -115,6 +117,7 @@ DATABASE_URL="postgresql://username:password@localhost:5432/message_wall"
 ```
 
 Then run the migrations:
+
 ```bash
 npx prisma migrate deploy
 ```
@@ -138,6 +141,7 @@ The application supports multiple board layout types:
 - **New Year Theme**: Special themed boards for celebrations
 
 Each board can be customized with:
+
 - Background colors and images
 - Font families and colors
 - Background music
@@ -176,6 +180,7 @@ public/                   # Static assets
 #### 1. VPS/Cloud Server (AWS EC2, DigitalOcean, Linode)
 
 Most flexible option with full control:
+
 - Set up Linux server (Ubuntu/CentOS)
 - Install Node.js 18+, PostgreSQL, PM2
 - Deploy with reverse proxy (Nginx/Caddy)
@@ -184,12 +189,14 @@ Most flexible option with full control:
 #### 2. Container Platforms (Railway, Render.com)
 
 Managed container deployment:
+
 ```bash
 # Build the Docker image
 docker build -t message-wall .
 
 # Deploy to platform of choice
 ```
+
 - **Railway**: Great for Node.js apps, built-in PostgreSQL
 - **Render.com**: Free tier available, automatic SSL
 - **Cost**: $0-25/month
@@ -208,6 +215,7 @@ pm2 start ecosystem.config.js
 ### Why Not Vercel/Netlify?
 
 These platforms use serverless functions that:
+
 - Cannot maintain persistent WebSocket connections
 - Have execution time limits (10-60 seconds)
 - Restart frequently, breaking Socket.IO connections
@@ -230,7 +238,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙋‍♂️ Support
 
-- Create an [issue](https://github.com/your-username/message-wall/issues) for bug reports or feature requests
+- Create an [issue](https://github.com/present42/message-wall/issues) for bug reports or feature requests
 - Check out our [documentation](./docs/) for more detailed guides
 - Join our community discussions
 
@@ -244,80 +252,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Happy messaging! 💬✨**
-
-Edit `.env` and configure your database URL and other settings.
-
-4. Set up the database:
-
-```bash
-npx prisma migrate dev
-npx prisma generate
-```
-
-5. Run the development server:
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) to see the message board.
-
-## Project Structure
-
-```
-src/
-├── app/                 # Next.js App Router pages
-│   ├── admin/          # Admin dashboard
-│   ├── api/            # API routes
-│   └── submit/         # Message submission form
-├── components/         # React components
-│   ├── ui/            # Base UI components
-│   ├── boards/        # Board layout components
-│   └── admin/         # Admin-specific components
-├── lib/               # Utility functions
-├── types/             # TypeScript definitions
-└── hooks/             # Custom React hooks
-```
-
-## Usage
-
-### For Users
-
-1. Visit the main page to view the current message board
-2. Click "Submit a Message" to add your message
-3. Messages require admin approval before appearing
-
-### For Administrators
-
-1. Visit `/admin` for the admin dashboard
-2. Moderate pending messages in the Posts section
-3. Create and manage boards in the Boards section
-4. Set which board is currently displayed
-
-## Board Types
-
-- **Flying Messages (0)**: Animated floating message cards
-- **Post-it (1)**: Grid layout with post-it note styling
-- **Post-it with Pins (2)**: Post-it notes with pin decorations
-- **Post-it with Tape (3)**: Post-it notes with tape decorations
-- **New Year Theme (4)**: Special themed layout
-
-## API Endpoints
-
-- `GET /` - Display current active board
-- `GET /submit` - Message submission form
-- `POST /api/posts` - Create new message
-- `GET /api/posts` - Get messages (with filters)
-- `GET /admin` - Admin dashboard
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## License
-
-This project is licensed under the ISC License.
