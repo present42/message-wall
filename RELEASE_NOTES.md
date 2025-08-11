@@ -27,10 +27,12 @@
 
 ### 🚀 Deployment Options
 
-- **AWS Free Tier** - Complete Terraform infrastructure (~$0/month for 12 months)
-- **Vercel** - One-click deployment with automatic builds
+- **VPS/Cloud Server** - Full control deployment (AWS EC2, DigitalOcean, Linode)
+- **Container Platforms** - Managed deployment (Railway, Render.com)
 - **Docker** - Containerized deployment for any environment
 - **Self-hosted** - Run on your own server with PM2 or systemd
+
+> **Note**: This application requires persistent WebSocket connections and cannot be deployed on serverless platforms like Vercel or Netlify.
 
 ### 🛠️ Developer Experience
 
@@ -106,10 +108,12 @@ The live demo at http://52.1.206.23:3000/ includes:
    terraform init && terraform apply
    ```
 
-3. **Vercel Deployment:**
-   - Fork repository
-   - Connect to Vercel
-   - Deploy with one click
+3. **Container Platform Deployment:**
+   ```bash
+   # Railway: Connect GitHub repository, add PostgreSQL, deploy
+   # Render.com: Connect GitHub, configure build settings, deploy
+   # Both platforms support WebSocket connections
+   ```
 
 ### 🤝 Contributing
 

@@ -1,17 +1,19 @@
 # Deployment Guide
 
-This guide covers different deployment options for the SSC Hub Message Wall application.
+This guide covers different deployment options for the Message Wall application.
+
+> **⚠️ Critical**: This application uses WebSocket (Socket.IO) for real-time messaging and requires a **persistent server connection**. It cannot be deployed on serverless platforms.
 
 ## Table of Contents
 
 - [Environment Setup](#environment-setup)
 - [Database Configuration](#database-configuration)
 - [Deployment Options](#deployment-options)
-  - [Vercel (Recommended)](#vercel-recommended)
-  - [Railway](#railway)
-  - [Docker](#docker)
+  - [VPS/Cloud Server](#vpscloud-server-recommended)
+  - [Container Platforms](#container-platforms)
+  - [Docker Self-Hosted](#docker-self-hosted)
   - [AWS EC2](#aws-ec2)
-  - [Self-Hosted](#self-hosted)
+- [Why Serverless Doesn't Work](#why-serverless-doesnt-work)
 
 ## Environment Setup
 
@@ -30,7 +32,7 @@ NEXTAUTH_URL="https://yourdomain.com"
 ```env
 UPLOAD_MAX_SIZE="5242880"  # 5MB in bytes
 ALLOWED_FILE_TYPES="image/jpeg,image/png,image/gif,image/webp"
-WEBSOCKET_PORT="3001"
+PORT="3000"  # Server port
 ```
 
 Generate a secure `NEXTAUTH_SECRET`:
@@ -68,16 +70,19 @@ npx prisma generate
 
 ## Deployment Options
 
-### Vercel (Recommended)
+### VPS/Cloud Server (Recommended)
 
-Vercel provides the easiest deployment for Next.js applications.
+Best for production deployments with full control.
+
+**Recommended Providers:**
+- **AWS EC2** (t3.small or larger) - ~$15-30/month
+- **DigitalOcean Droplets** - $6-12/month  
+- **Linode VPS** - $5-10/month
+- **Vultr** - $6-12/month
 
 #### Steps:
 
-1. **Push to GitHub**:
-   ```bash
-   git add .
-   git commit -m "Deploy to production"
+1. **Set up Ubuntu Server** (20.04+ recommended)
    git push origin main
    ```
 
@@ -112,10 +117,70 @@ Railway offers simple deployment with built-in PostgreSQL.
 3. **Environment Variables**:
    - Add your environment variables in Railway dashboard
 
-4. **Deploy**:
-   - Railway automatically deploys on git push
+2. **Install Dependencies**:
+   ```bash
+   # Update system
+   sudo apt update && sudo apt upgrade -y
+   
+   # Install Node.js 18
+   curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+   sudo apt install -y nodejs
+   
+   # Install PostgreSQL
+   sudo apt install -y postgresql postgresql-contrib
+   
+   # Install PM2 for process management
+   sudo npm install -g pm2
+   
+   # Install Nginx for reverse proxy
+   sudo apt install -y nginx
+   ```
 
-### Docker
+3. **Setup Database**:
+   ```bash
+   # Create database user and database
+   sudo -u postgres createuser --interactive messagewall
+   sudo -u postgres createdb messagewall
+   sudo -u postgres psql -c "ALTER USER messagewall WITH PASSWORD 'your-secure-password';"
+   ```
+
+4. **Deploy Application**:
+   ```bash
+   # Clone repository
+   git clone <your-repo-url>
+   cd message-wall
+   
+   # Install dependencies
+   npm install
+   
+   # Set environment variables
+   cp .env.example .env
+   # Edit .env with your database URL and other variables
+   
+   # Build application
+   npm run build
+   
+   # Start with PM2
+   pm2 start ecosystem.config.js
+   pm2 save
+   pm2 startup
+   ```
+
+### Container Platforms
+
+Perfect for managed deployment without server maintenance.
+
+#### Railway 🚂
+- **Cost**: $5/month, includes PostgreSQL
+- **Pros**: Zero configuration, WebSocket support, automatic SSL
+- **Steps**: Connect GitHub → Add PostgreSQL → Deploy
+
+#### Render.com 🎨  
+- **Cost**: $7/month for web service + database
+- **Pros**: Free tier available, simple interface, WebSocket support
+- **Steps**: Connect GitHub → Add PostgreSQL → Deploy
+
+### Docker Self-Hosted
 
 Deploy using Docker containers.
 
@@ -219,6 +284,38 @@ terraform destroy  # Remove all AWS resources
 ```
 
 **Note**: The included Terraform configuration is production-ready but uses SQLite for database to stay within free tier limits.
+
+## Why Serverless Doesn't Work
+
+### Technical Constraints
+
+**WebSocket Requirements:**
+- Persistent connections between client and server
+- Stateful communication for real-time updates  
+- Long-running connections (hours/days)
+
+**Serverless Limitations:**
+- Functions have execution time limits (10-60 seconds)
+- No persistent memory between requests
+- Cold starts interrupt connections
+- Cannot maintain WebSocket state
+
+### Platforms That Won't Work:
+
+❌ **Vercel**: Serverless functions only, 10s timeout  
+❌ **Netlify**: Static hosting + functions, no persistent connections  
+❌ **AWS Lambda**: Serverless functions, 15 minute max timeout  
+❌ **Cloudflare Workers**: Edge computing, no persistent state
+
+### If You Want Serverless:
+
+To use serverless platforms, you'd need to:
+1. Remove WebSocket functionality entirely
+2. Use polling instead of real-time updates
+3. Use external WebSocket service (Pusher, Ably) - adds cost
+4. Implement Server-Sent Events (SSE) - less reliable
+
+But this would require significant architectural changes and remove core functionality.
 
 ### Self-Hosted
 

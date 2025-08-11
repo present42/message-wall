@@ -169,36 +169,50 @@ public/                   # Static assets
 
 ## 🚀 Deployment
 
-### Vercel (Recommended)
+> **⚠️ Important**: This application uses WebSocket for real-time messaging, which requires a persistent server connection. It **cannot** be deployed on serverless platforms like Vercel or Netlify.
 
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Set environment variables in Vercel dashboard
-4. Deploy!
+### Recommended Deployment Options
 
-### Docker
+#### 1. VPS/Cloud Server (AWS EC2, DigitalOcean, Linode)
 
+Most flexible option with full control:
+- Set up Linux server (Ubuntu/CentOS)
+- Install Node.js 18+, PostgreSQL, PM2
+- Deploy with reverse proxy (Nginx/Caddy)
+- **Cost**: $5-50/month depending on resources
+
+#### 2. Container Platforms (Railway, Render.com)
+
+Managed container deployment:
 ```bash
 # Build the Docker image
 docker build -t message-wall .
 
-# Run the container
-docker run -p 3000:3000 message-wall
+# Deploy to platform of choice
+```
+- **Railway**: Great for Node.js apps, built-in PostgreSQL
+- **Render.com**: Free tier available, automatic SSL
+- **Cost**: $0-25/month
+
+#### 3. Self-Hosted
+
+```bash
+# Build the application
+npm run build
+
+# Start with PM2 for production
+npm install -g pm2
+pm2 start ecosystem.config.js
 ```
 
-### Manual Deployment
+### Why Not Vercel/Netlify?
 
-1. Build the application:
-   ```bash
-   npm run build
-   ```
+These platforms use serverless functions that:
+- Cannot maintain persistent WebSocket connections
+- Have execution time limits (10-60 seconds)
+- Restart frequently, breaking Socket.IO connections
 
-2. Start the production server:
-   ```bash
-   npm run start
-   ```
-
-For detailed deployment guides, see our [deployment documentation](./docs/DEPLOYMENT.md).
+For detailed deployment guides, see our [deployment documentation](./DEPLOYMENT.md).
 
 ## 🤝 Contributing
 
