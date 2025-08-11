@@ -1,0 +1,20 @@
+# Example Terraform variables
+# Copy this file to terraform.tfvars and update with your values
+
+aws_region = "us-east-1"
+project_name = "messagewall"
+
+# Your AWS EC2 Key Pair name (create this in AWS Console first)
+key_name = "your-key-pair-name"
+
+# Your public IP for SSH access (get from https://whatismyipaddress.com/)
+my_ip = "YOUR_PUBLIC_IP/32"
+
+# Optional: GitHub token for private repositories
+# github_token = "your_github_personal_access_token"
+
+# Optional: Custom domain name
+# domain_name = "messagewall.yourdomain.com"
+
+# Optional: SSL certificate ARN (if using HTTPS)
+# ssl_certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"

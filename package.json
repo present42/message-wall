@@ -2,7 +2,7 @@
   "name": "message-wall",
   "version": "0.1.0",
   "type": "module",
-  "private": true,
+  "private": false,
   "scripts": {
     "dev": "node server.js",
     "dev:next": "next dev --turbopack",
@@ -10,10 +10,18 @@
     "start": "NODE_ENV=production node server.js",
     "start:next": "next start",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "db:reset": "prisma migrate reset --force",
+    "db:deploy": "prisma migrate deploy",
+    "setup": "npm install && npx prisma generate && npx prisma migrate dev && npm run db:seed",
+    "clean": "rm -rf .next node_modules/.cache",
+    "health-check": "node scripts/health-check.cjs",
+    "prepare-public": "npm run health-check && echo 'See CLEANUP_CHECKLIST.md for final steps'"
   },
   "dependencies": {
     "@prisma/client": "^6.13.0",

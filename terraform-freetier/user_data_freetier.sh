@@ -11,24 +11,17 @@ exec 2>&1
 
 echo "Starting free tier user data script..."
 
-# Update system
-yum update -y
+# Update system (Amazon Linux 2023 uses dnf)
+dnf update -y
 
-# Install Node.js 18
-curl -fsSL https://rpm.nodesource.com/setup_18.x | bash -
-yum install -y nodejs
+# Install Node.js 18 directly from Amazon Linux 2023 repositories (much easier!)
+dnf install -y nodejs npm
 
-# Install PM2 globally
-npm install -g pm2
+# Install additional tools
+dnf install -y git sqlite nginx
 
-# Install nginx
-yum install -y nginx
-
-# Install git
-yum install -y git
-
-# Install SQLite (for local database)
-yum install -y sqlite
+# Install pnpm and PM2 globally
+npm install -g pnpm pm2
 
 # Create application user
 useradd -m -s /bin/bash messagewall
@@ -43,10 +36,10 @@ mkdir -p /var/www/message-wall/database
 chown -R messagewall:messagewall /var/www/message-wall
 chown -R messagewall:messagewall /var/www/uploads
 
-# Clone repository (replace with your actual repo)
+# Clone repository using GitHub token (replace YOUR_TOKEN with actual token)
 cd /var/www
-# For now, we'll create a placeholder - you'll need to replace this with your actual repo
-git clone https://github.com/your-username/message-wall.git || {
+# Replace YOUR_GITHUB_TOKEN with your actual personal access token
+git clone https://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@github.com/present42/message-wall.git || {
     echo "Repository not found. Creating placeholder structure..."
     mkdir -p message-wall
     cd message-wall
@@ -80,7 +73,7 @@ if [ -f "package.json" ]; then
     echo "Setting up application..."
     
     # Install dependencies as messagewall user
-    sudo -u messagewall npm ci
+    sudo -u messagewall pnpm install --frozen-lockfile
     
     # Generate Prisma client (will use SQLite)
     sudo -u messagewall npx prisma generate
@@ -256,7 +249,7 @@ cat > /home/ec2-user/deploy.sh << 'EOF'
 echo "Updating Message Wall application..."
 cd /var/www/message-wall
 sudo -u messagewall git pull origin main
-sudo -u messagewall npm ci
+sudo -u messagewall pnpm install --frozen-lockfile
 sudo -u messagewall npx prisma generate
 sudo -u messagewall npx prisma migrate deploy
 sudo -u messagewall npm run build

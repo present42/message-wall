@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -40,15 +41,15 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-/src/generated/prisma
-
 # Database files
 *.db
 *.db-journal
 *.sqlite
 *.sqlite3
 /prisma/dev.db*
-/database/
+/prisma/*.db*
+dev.db*
+database_dump.sql
 
 # Uploads directory (user uploaded files)
 /uploads/
@@ -61,23 +62,44 @@ next-env.d.ts
 *.log
 /pm2-logs/
 
-# AWS and deployment
-/terraform-freetier/.terraform/
-/terraform-freetier/*.tfstate*
-/terraform-freetier/.terraform.lock.hcl
+# Deployment and Infrastructure (CRITICAL - Contains secrets)
+/terraform-freetier/
+*.tfstate*
+terraform.tfvars
+.terraform/
+.terraform.lock.hcl
+*.pem
+*.key
+*-key.pem
+deploy-*.sh
+deploy-*.ps1
+aws-*.json
+iam-permissions.json
+
+# Keep generic terraform/ directory but ignore sensitive configs
+!/terraform/
+/terraform/*.tfvars
+/terraform/.terraform/
+/terraform/*.tfstate*
+
+# Development utilities and sensitive data
+generate-hash.js
+healthcheck.py
+database_dump.sql
+install-tools.ps1
+
+# Environment files with real data
+.env.local
+.env.production
+.env.development
+.env.staging
 
 # IDE and editor files
-.vscode/settings.json
-.vscode/launch.json
+.vscode/
 .idea/
 *.swp
 *.swo
-
-# GitHub specific files (excluding entire .github folder)
-.github/
-
-# VS code specific files (excluding entire .vscode folder)
-.vscode/
+*~
 
 # OS generated files
 Thumbs.db
@@ -91,3 +113,19 @@ ehthumbs.db
 # Temporary files
 /tmp/
 *.tmp
+*.temp
+
+# Runtime and process files
+/pids/
+*.pid
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+/coverage/
+/.nyc_output/
+
+# npm package files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
