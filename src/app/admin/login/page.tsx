@@ -104,16 +104,6 @@ export default function AdminLogin() {
                             {isLoading ? 'Signing in...' : 'Sign in'}
                         </button>
                     </div>
-
-                    <div className="text-center">
-                        <div className="text-sm text-gray-600">
-                            <p className="mb-2">Demo credentials:</p>
-                            <div className="bg-gray-50 p-3 rounded border text-left">
-                                <p><strong>Username:</strong> admin</p>
-                                <p><strong>Password:</strong> admin123</p>
-                            </div>
-                        </div>
-                    </div>
                 </form>
             </div>
         </div>

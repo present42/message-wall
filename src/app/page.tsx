@@ -144,7 +144,7 @@ export default function Home() {
           </Link>
 
           {/* Documentation */}
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="group relative rounded-2xl border border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 p-8 shadow-sm transition-all hover:shadow-lg hover:scale-[1.02]">
+          <a href="https://github.com/present42/message-wall" target="_blank" rel="noopener noreferrer" className="group relative rounded-2xl border border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 p-8 shadow-sm transition-all hover:shadow-lg hover:scale-[1.02]">
             <div className="flex items-start space-x-4">
               <div className="flex-shrink-0">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-orange-600 text-white">
